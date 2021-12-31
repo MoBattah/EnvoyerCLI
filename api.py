@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 #Load .env file
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
+API_URL = "https://envoyer.io/api"
 
 # Authentication headers
 HEADERS = {
@@ -14,7 +15,7 @@ HEADERS = {
     "Content-Type": "application/json"
     }
 
-API_URL = "https://envoyer.io/api"
+
 
 class Projects:
     
@@ -36,13 +37,11 @@ class Projects:
 
     def search_projects(search_term):
             
-            full_project_list = Projects.get_all()
-            searched_project_list_of_ids = []
-            for key in full_project_list:
+            searched_project_list_of_names_and_ids = {}
+            for key in Projects.get_all():
                 if search_term in key["name"]:
-                    project_id = str(key["id"])
-                    searched_project_list_of_ids.append(project_id)
-            return searched_project_list_of_ids
+                    searched_project_list_of_names_and_ids[key["name"]] = str(key["id"])
+            return searched_project_list_of_names_and_ids
 
                     
     def invite_user_to_project(email, search_term):
@@ -52,6 +51,6 @@ class Projects:
                 'email' : email
             }
 
-            for project_id in project_list:
-                create_collaborator_response = requests.post(url=API_URL+"/projects/"+project_id+"/collaborators", json=body, timeout=5, headers=HEADERS)
-                print(create_collaborator_response.text)
+            for x in project_list.values():
+                create_collaborator_response = requests.post(url=API_URL+"/projects/"+x+"/collaborators", json=body, timeout=5, headers=HEADERS)
+
