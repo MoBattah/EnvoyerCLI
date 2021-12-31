@@ -44,13 +44,12 @@ class Projects:
             return searched_project_list_of_names_and_ids
 
                     
-    def invite_user_to_project(email, search_term):
+    def invite_user_to_project(email, search_term):      
             
-            project_list = Projects.search_projects(search_term)
             body = {
                 'email' : email
             }
 
-            for x in project_list.values():
+            for x in Projects.search_projects(search_term).values():
                 create_collaborator_response = requests.post(url=API_URL+"/projects/"+x+"/collaborators", json=body, timeout=5, headers=HEADERS)
 
