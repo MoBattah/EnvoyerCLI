@@ -15,7 +15,18 @@ HEADERS = {
     "Content-Type": "application/json"
     }
 
+class Hooks:
+    def get_hooks_by_project_id(project_id):
 
+        get_list_response = requests.get(url=API_URL + "/projects/" + str(project_id) + "/hooks", headers=HEADERS)
+        if get_list_response.status_code != 200:
+            print("Issue with retrieving hooks. Exiting.")
+            exit()
+        elif get_list_response.status_code == 200:
+            hooks = json.loads(get_list_response.text)["hooks"]
+            return hooks
+        else:
+            pass
 
 class Projects:
     
